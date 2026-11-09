@@ -1,0 +1,9 @@
+ref/
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+packages/
+CapturedImages/
+Logs/

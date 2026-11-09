@@ -1,0 +1,129 @@
+<Window x:Class="FAVIS.ProcessEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Process Edit"
+        Width="820"
+        Height="760"
+        MinWidth="650"
+        MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        Background="#1A1A1A"
+        Foreground="White"
+        FontFamily="{DynamicResource DefaultFontFamily}">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.2*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Mask" FontSize="14" FontWeight="Bold" Margin="0,0,0,6"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+                <Button Content="추가" Width="60" Margin="0,0,6,0" Tag="Mask" Click="AddButton_Click"/>
+                <Button Content="삭제" Width="60" Margin="0,0,6,0" Tag="Mask" Click="DeleteButton_Click"/>
+                <Button Content="위로" Width="60" Margin="0,0,6,0" Tag="Mask" Click="MoveUpButton_Click"/>
+                <Button Content="아래로" Width="60" Tag="Mask" Click="MoveDownButton_Click"/>
+            </StackPanel>
+            <ListBox x:Name="MaskListBox" Grid.Row="2" ItemsSource="{Binding MaskItems}"
+                     Background="#0A0A0A" Foreground="White" BorderBrush="#444444"
+                     SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="PathItemTextBox"
+                                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     TextChanged="PathItemTextBox_TextChanged"
+                                     Background="#0A0A0A" Foreground="White" BorderBrush="#444444"
+                                     Padding="4,2"/>
+                            <Popup Placement="Bottom" StaysOpen="False" AllowsTransparency="True"
+                                   PlacementTarget="{Binding ElementName=PathItemTextBox}"
+                                   x:Name="PathTokenPopup" PopupAnimation="Fade">
+                                <Border Background="#1A1A1A" BorderBrush="#555555" BorderThickness="1">
+                                    <ListBox Tag="{Binding ElementName=PathItemTextBox}"
+                                             SelectionChanged="PathTokenListBox_SelectionChanged"
+                                             Background="#1A1A1A" Foreground="White" Padding="2">
+                                        <ListBoxItem Content="{}{Default}"/>
+                                        <ListBoxItem Content="{}{ModelDir}"/>
+                                        <ListBoxItem Content="{}{ModelNo}"/>
+                                        <ListBoxItem Content="{}{ModelName}"/>
+                                        <ListBoxItem Content="{}{StepNo}"/>
+                                        <ListBoxItem Content="{}{StepName}"/>
+                                        <ListBoxItem Content="{}{WorkDir}"/>
+                                    </ListBox>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,0,0,8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Global &amp; Local" FontSize="14" FontWeight="Bold" Margin="0,0,0,6"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+                <Button Content="추가" Width="60" Margin="0,0,6,0" Tag="GlobalLocal" Click="AddButton_Click"/>
+                <Button Content="삭제" Width="60" Margin="0,0,6,0" Tag="GlobalLocal" Click="DeleteButton_Click"/>
+                <Button Content="위로" Width="60" Margin="0,0,6,0" Tag="GlobalLocal" Click="MoveUpButton_Click"/>
+                <Button Content="아래로" Width="60" Tag="GlobalLocal" Click="MoveDownButton_Click"/>
+            </StackPanel>
+            <ListBox x:Name="GlobalLocalListBox" Grid.Row="2" ItemsSource="{Binding GlobalLocalItems}"
+                     Background="#0A0A0A" Foreground="White" BorderBrush="#444444"
+                     SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="2">
+                            <TextBox x:Name="PathItemTextBox"
+                                     Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     TextChanged="PathItemTextBox_TextChanged"
+                                     Background="#0A0A0A" Foreground="White" BorderBrush="#444444"
+                                     Padding="4,2"/>
+                            <Popup x:Name="PathTokenPopup" Placement="Bottom" StaysOpen="False"
+                                   AllowsTransparency="True"
+                                   PlacementTarget="{Binding ElementName=PathItemTextBox}"
+                                   PopupAnimation="Fade">
+                                <Border Background="#1A1A1A" BorderBrush="#555555" BorderThickness="1">
+                                    <ListBox Tag="{Binding ElementName=PathItemTextBox}"
+                                             SelectionChanged="PathTokenListBox_SelectionChanged"
+                                             Background="#1A1A1A" Foreground="White" Padding="2">
+                                        <ListBoxItem Content="{}{Default}"/>
+                                        <ListBoxItem Content="{}{ModelDir}"/>
+                                        <ListBoxItem Content="{}{ModelNo}"/>
+                                        <ListBoxItem Content="{}{ModelName}"/>
+                                        <ListBoxItem Content="{}{StepNo}"/>
+                                        <ListBoxItem Content="{}{StepName}"/>
+                                        <ListBoxItem Content="{}{WorkDir}"/>
+                                        <ListBoxItem Content="{}{Phase}"/>
+                                    </ListBox>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <TextBox x:Name="PathPreviewTextBox" Grid.Row="2" Margin="0,0,0,8"
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
+                 IsReadOnly="True" Background="#0A0A0A" Foreground="White"
+                 BorderBrush="#444444" Padding="6"/>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="확인" Width="80" Height="30" Margin="0,0,8,0" Click="OkButton_Click"/>
+            <Button Content="취소" Width="80" Height="30" Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

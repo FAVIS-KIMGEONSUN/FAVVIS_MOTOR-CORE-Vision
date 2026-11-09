@@ -1,0 +1,183 @@
+<Window x:Class="FAVIS.TestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FAVIS"
+        Title="Test"
+        Width="920"
+        Height="760"
+        WindowStartupLocation="CenterOwner"
+        Background="#1A1A1A"
+        Foreground="White"
+        FontFamily="{DynamicResource DefaultFontFamily}">
+    <Grid Margin="12">
+        <TabControl Background="#1A1A1A" Foreground="White">
+            <TabItem Header="PLC">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Test PLC Signal Control" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+                    <Button x:Name="TriggerButton" Grid.Row="1" Content="Trigger: OFF" Height="36"
+                            Margin="0,0,0,8" Background="#555555" Foreground="White"
+                            FontWeight="Bold" Click="TriggerButton_Click"/>
+                    <Button x:Name="ResetButton" Grid.Row="2" Content="Reset: OFF" Height="36"
+                            Background="#555555" Foreground="White"
+                            FontWeight="Bold" Click="ResetButton_Click"/>
+                    <TextBlock Text="PC Output Signals" Grid.Row="3" Margin="0,12,0,4"
+                               FontWeight="Bold"/>
+                    <UniformGrid Grid.Row="4" Columns="3" Margin="0,0,0,8">
+                        <Button x:Name="ReadyButton" Tag="Ready" Content="Ready: OFF"
+                                Height="32" Margin="0,0,6,0" Background="#555555"
+                                Foreground="White" FontWeight="Bold" Click="PcSignalButton_Click"/>
+                        <Button x:Name="BusyButton" Tag="Busy" Content="Busy: OFF"
+                                Height="32" Margin="0,0,6,0" Background="#555555"
+                                Foreground="White" FontWeight="Bold" Click="PcSignalButton_Click"/>
+                        <Button x:Name="GrabButton" Tag="Grab" Content="Grab: OFF"
+                                Height="32" Background="#555555" Foreground="White"
+                                FontWeight="Bold" Click="PcSignalButton_Click"/>
+                    </UniformGrid>
+                    <UniformGrid Grid.Row="5" Columns="3" Margin="0,0,0,8">
+                        <Button x:Name="OkButton" Tag="OK" Content="OK: OFF"
+                                Height="32" Margin="0,0,6,0" Background="#555555"
+                                Foreground="White" FontWeight="Bold" Click="PcSignalButton_Click" RenderTransformOrigin="0.5,0.5"/>
+                        <Button x:Name="NgButton" Tag="NG" Content="NG: OFF"
+                                Height="32" Margin="0,0,6,0" Background="#555555"
+                                Foreground="White" FontWeight="Bold" Click="PcSignalButton_Click"/>
+                        <Button x:Name="CompleteButton" Tag="Complete" Content="Complete: OFF"
+                                Height="32" Background="#555555" Foreground="White"
+                                FontWeight="Bold" Click="PcSignalButton_Click"/>
+                    </UniformGrid>
+                    <TextBlock Text="Model No" Grid.Row="6" Margin="0,12,0,4"/>
+                    <TextBox x:Name="ModelNoTextBox" Grid.Row="7" Height="28" Text="1"
+                             Background="#0A0A0A" Foreground="White" BorderBrush="#444444"/>
+                    <TextBlock Text="Step No" Grid.Row="8" Margin="0,8,0,4"/>
+                    <TextBox x:Name="StepNoTextBox" Grid.Row="9" Height="28" Text="1"
+                             Background="#0A0A0A" Foreground="White" BorderBrush="#444444"/>
+                    <TextBlock Text="Serial No" Grid.Row="10" Margin="0,8,0,4"/>
+                    <TextBox x:Name="SerialNoTextBox" Grid.Row="11" Height="28" Text="1"
+                             Background="#0A0A0A" Foreground="White" BorderBrush="#444444"/>
+                    <StackPanel Grid.Row="12" Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button x:Name="RunSequenceButton" Content="Step All" Width="100" Height="28"
+                                Background="#4488FF" Foreground="White"
+                                FontWeight="Bold" Click="RunSequenceButton_Click"/>
+                        <TextBlock x:Name="OutputStatusText" Margin="12,5,0,0"
+                                   Foreground="#AAAAAA" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Grabber">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Deediim Grabber Test" FontSize="16" FontWeight="Bold" Margin="0,0,0,12"/>
+                    <Grid Grid.Row="1" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="SensorIndex" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox x:Name="GrabberCameraTextBox" Grid.Column="1" Height="28" Text="0"
+                                 Background="#0A0A0A" Foreground="White" BorderBrush="#444444"/>
+                        <TextBlock Text="PatternIndex" Grid.Column="2" VerticalAlignment="Center" Margin="20,0,8,0"/>
+                        <TextBox x:Name="GrabberSequenceTextBox" Grid.Column="3" Height="28" Text="0"
+                                 Background="#0A0A0A" Foreground="White" BorderBrush="#444444"/>
+                        <Button x:Name="RunGrabberButton" Grid.Column="4" Content="RUN" Width="90" Height="28"
+                                HorizontalAlignment="Left" Margin="20,0,0,0"
+                                Background="#4488FF" Foreground="White"
+                                FontWeight="Bold" Click="RunGrabberButton_Click"/>
+                    </Grid>
+                    <TextBlock Text="송신 메세지" Grid.Row="2" Margin="0,0,0,4" FontWeight="Bold"/>
+                    <TextBox x:Name="SentMessageTextBox" Grid.Row="3" Height="120"
+                             IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             Background="#0A0A0A" Foreground="#CCFF00" BorderBrush="#444444"/>
+                    <Grid Grid.Row="4" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="수신 메세지" Margin="0,0,8,4" FontWeight="Bold"/>
+                        <TextBlock Text="Grabber Display" Grid.Column="1" Margin="8,0,0,4"
+                                   FontWeight="Bold"/>
+                        <TextBox x:Name="ReceivedMessageTextBox" Grid.Row="1"
+                                 IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Background="#0A0A0A" Foreground="#CCFF00" BorderBrush="#444444"
+                                 Margin="0,0,8,0"/>
+                        <Border Grid.Row="1" Grid.Column="1" BorderBrush="#444444"
+                                BorderThickness="1" Margin="8,0,0,0">
+                            <local:ZoomPanDisplay x:Name="GrabberDisplay"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Light">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="External Light Test" FontSize="16" FontWeight="Bold"
+                               Margin="0,0,0,16"/>
+                    <TextBlock Grid.Row="1" Text="Brightness (0-100%)" Margin="0,0,0,6"/>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Slider x:Name="LightBrightnessSlider" Minimum="0" Maximum="100" Value="100"
+                                TickFrequency="1" IsSnapToTickEnabled="True"
+                                VerticalAlignment="Center"
+                                ValueChanged="LightBrightnessSlider_ValueChanged"/>
+                        <TextBlock x:Name="LightBrightnessText" Grid.Column="1" Text="100%"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Margin="8,0,0,0"/>
+                    </Grid>
+                    <Button x:Name="SetLightBrightnessButton" Grid.Row="3" Content="Set Brightness"
+                            Height="36" Margin="0,12,0,0" Background="#4488FF"
+                            Foreground="White" FontWeight="Bold"
+                            Click="SetLightBrightnessButton_Click"/>
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,12,0,0">
+                        <Button x:Name="LightOnButton" Content="ON" Width="100" Height="36"
+                                Margin="0,0,8,0" Background="#555555" Foreground="White"
+                                FontWeight="Bold" Click="LightOnButton_Click"/>
+                        <Button x:Name="LightOffButton" Content="OFF" Width="100" Height="36"
+                                Background="#555555" Foreground="White"
+                                FontWeight="Bold" Click="LightOffButton_Click"/>
+                        <TextBlock x:Name="LightStatusText" Margin="16,10,0,0"
+                                   Foreground="#AAAAAA" Text="조명 출력: OFF"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -1,0 +1,24 @@
+{
+  "PcName": "Default",
+  "ImageSavePath": "CapturedImages",
+  "DisplayCount": 7,
+  "Grabbers": [
+    {
+      "Id": 1,
+      "Name": "Grabber 1",
+      "IpAddress": "127.0.0.1",
+      "Port": 9000,
+      "SensorIndex": 0,
+      "PatternIndex": 0
+    }
+  ],
+  "Sequences": [
+    { "Index": 1, "Name": "Stator Varnish Detect", "Path": "", "CameraIndex": 1, "DisplayIndex": 1, "Enabled": true },
+    { "Index": 2, "Name": "Rotor Winding Check", "Path": "", "CameraIndex": 1, "DisplayIndex": 2, "Enabled": true },
+    { "Index": 3, "Name": "Oil Hole Inspect", "Path": "", "CameraIndex": 1, "DisplayIndex": 3, "Enabled": true },
+    { "Index": 4, "Name": "Particle Count", "Path": "", "CameraIndex": 1, "DisplayIndex": 4, "Enabled": true },
+    { "Index": 5, "Name": "Varnish Level", "Path": "", "CameraIndex": 1, "DisplayIndex": 5, "Enabled": true },
+    { "Index": 6, "Name": "Motor Load Test", "Path": "", "CameraIndex": 1, "DisplayIndex": 6, "Enabled": true },
+    { "Index": 7, "Name": "Insulation Test", "Path": "", "CameraIndex": 1, "DisplayIndex": 7, "Enabled": true }
+  ]
+}

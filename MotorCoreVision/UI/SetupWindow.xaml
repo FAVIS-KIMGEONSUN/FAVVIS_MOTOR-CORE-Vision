@@ -1,0 +1,156 @@
+<Window x:Class="FAVIS.SetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FAVIS"
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        Title="Setup"
+        Width="1600"
+        Height="950"
+        MinWidth="1000"
+        MinHeight="700"
+        WindowStartupLocation="CenterOwner"
+        Background="#1A1A1A"
+        Foreground="White"
+        FontFamily="{DynamicResource DefaultFontFamily}"
+        Closing="SetupWindow_Closing">
+    <Window.Resources>
+        <DataTemplate x:Key="ProcessPathTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="FileStatus"
+                           Text="✅"
+                           FontFamily="Segoe UI Emoji"
+                           Foreground="#32CD32"
+                           Margin="2,0,6,0"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding ProcessPath.Path}"
+                           TextWrapping="Wrap"/>
+            </Grid>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Exists}" Value="False">
+                    <Setter TargetName="FileStatus" Property="TextBlock.Text" Value="❌"/>
+                    <Setter TargetName="FileStatus" Property="TextBlock.Foreground" Value="#F44336"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid x:Name="ContentGrid" Margin="12" SizeChanged="ContentGrid_SizeChanged">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Margin="0,0,10,0"
+                Background="#0A0A0A" BorderBrush="#444444" BorderThickness="1">
+            <Grid>
+                <local:ZoomPanDisplay x:Name="ImageDisplay"/>
+                <wfi:WindowsFormsHost x:Name="RecordDisplayHost" Visibility="Collapsed"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1.1*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="1.4*"/>
+            </Grid.RowDefinitions>
+
+            <WrapPanel Grid.Row="0" Margin="0,0,0,8">
+                <Button x:Name="CaptureButton" Content="촬영" Width="64" Height="36" Margin="2"
+                        Click="CaptureButton_Click"/>
+                <Button x:Name="InspectionButton" Content="전체검사" Width="78" Height="36" Margin="2"
+                        Click="InspectionButton_Click"/>
+                <Button x:Name="RunSelectedButton" Content="검사" Width="60" Height="36" Margin="2"
+                        Click="RunSelectedButton_Click"/>
+                <Button Content="이미지 불러오기" Width="120" Height="36" Margin="2"
+                        Click="LoadImagesButton_Click"/>
+                <Button Content="이미지 저장" Width="90" Height="36" Margin="2"
+                        Click="SaveImagesButton_Click"/>
+                <Button Content="전체 적용" Width="84" Height="36" Margin="2"
+                        Click="ApplyToSimilarSequencesButton_Click"/>
+                <Button Content="탐색기" Width="70" Height="36" Margin="2"
+                        Click="OpenExplorerButton_Click"/>
+                <Button Content="종료" Width="60" Height="36" Margin="2"
+                        Click="ExitButton_Click"/>
+            </WrapPanel>
+
+            <Grid Grid.Row="1" Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Sequence" FontWeight="Bold" Margin="2,0,0,4"/>
+                <ListBox x:Name="SequenceListBox" Grid.Row="1"
+                         DisplayMemberPath="Name"
+                         SelectionChanged="SequenceListBox_SelectionChanged"
+                         Background="#0A0A0A" Foreground="White"
+                         BorderBrush="#444444"/>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Mask" FontWeight="Bold" Margin="2,0,0,4"/>
+                <ListBox x:Name="MaskListBox" Grid.Row="1"
+                         SelectionChanged="ProcessPathListBox_SelectionChanged"
+                         MouseDoubleClick="ProcessPathListBox_MouseDoubleClick"
+                         ItemTemplate="{StaticResource ProcessPathTemplate}"
+                         Background="#0A0A0A" Foreground="White"
+                         BorderBrush="#444444"/>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Global" FontWeight="Bold" Margin="2,0,0,4"/>
+                <ListBox x:Name="GlobalListBox" Grid.Row="1"
+                         SelectionChanged="ProcessPathListBox_SelectionChanged"
+                         MouseDoubleClick="ProcessPathListBox_MouseDoubleClick"
+                         ItemTemplate="{StaticResource ProcessPathTemplate}"
+                         Background="#0A0A0A" Foreground="White"
+                         BorderBrush="#444444"/>
+            </Grid>
+
+            <Grid Grid.Row="4" Margin="0,0,0,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Local" FontWeight="Bold" Margin="2,0,0,4"/>
+                <ListBox x:Name="LocalListBox" Grid.Row="1"
+                         SelectionChanged="ProcessPathListBox_SelectionChanged"
+                         MouseDoubleClick="ProcessPathListBox_MouseDoubleClick"
+                         ItemTemplate="{StaticResource ProcessPathTemplate}"
+                         Background="#0A0A0A" Foreground="White"
+                         BorderBrush="#444444"/>
+            </Grid>
+
+            <Grid Grid.Row="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Log" FontWeight="Bold" Margin="2,0,0,4"/>
+                <ListBox x:Name="LogListBox" Grid.Row="1"
+                         Background="#0A0A0A" Foreground="White"
+                         BorderBrush="#444444">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

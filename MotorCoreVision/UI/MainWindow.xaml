@@ -1,0 +1,487 @@
+<Window x:Class="FAVIS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FAVIS"
+        Title="MotorCoreVision - Inspection System" Height="1080" Width="1920"
+        Background="#1A1A1A" Foreground="White"
+        FontFamily="{DynamicResource DefaultFontFamily}"
+        WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
+    <DockPanel LastChildFill="True">
+
+        <!-- Title Section -->
+        <Grid DockPanel.Dock="Top" Background="#0D0D0D" Margin="0" Height="60">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0">
+                <TextBlock Text="MotorCoreVision" FontSize="22" FontWeight="Bold" Foreground="#CCFF00"/>
+                <TextBlock Text=" - Inspection System" FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="#888888"/>
+                <TextBlock x:Name="PcNameTitleText" FontSize="16" VerticalAlignment="Center"
+                           Margin="12,0,0,0" Foreground="White" FontWeight="Bold"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0">
+                <TextBlock x:Name="ProgramVersionText" TextAlignment="Right" FontSize="11"
+                           Foreground="#AAAAAA" FontWeight="Bold"/>
+                <TextBlock x:Name="CurrentDateTimeText" TextAlignment="Right" FontSize="14"
+                           Foreground="White" FontWeight="Bold" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Control Panel -->
+        <Grid DockPanel.Dock="Top" Background="#242424" Margin="10,0" Height="50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Content="AUTO" Height="35" Width="80" Margin="5" Background="#666666" Foreground="White" FontWeight="Bold" Click="AutoButton_Click"/>
+                <Button x:Name="StopButton" Content="STOP" Height="35" Width="80" Margin="5" Background="#FF4444" Foreground="White" FontWeight="Bold" Click="StopButton_Click"/>
+                <Border Background="#111111" BorderBrush="#555555" BorderThickness="1"
+                        CornerRadius="2" Height="35" MinWidth="120" Margin="5" Padding="10,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Status:" Foreground="#AAAAAA" FontSize="11"
+                                   FontWeight="Bold" Margin="0,0,8,0"/>
+                        <TextBlock x:Name="CurrentStatusText" Text="STOP" Foreground="#FF8800"
+                                   FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="10,0"/>
+
+                <Button Content="Setup" Height="35" Width="70" Margin="5"
+                        Background="#4488FF" Foreground="White" FontWeight="Bold"
+                        Click="SetupButton_Click"/>
+                <Button x:Name="ModelButton" Content="Model" Height="35" Width="70" Margin="5"
+                        Background="#4488FF" Foreground="White" FontWeight="Bold"
+                        Click="ModelButton_Click"/>
+                <Button x:Name="TestButton" Content="Test" Height="35" Width="70" Margin="5"
+                        Background="#CC8800" Foreground="White" FontWeight="Bold"
+                        Click="TestButton_Click"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,5,0">
+                <Button x:Name="SystemButton" Content="System" Height="40" Width="80" Margin="5"
+                        Background="#9966FF" Foreground="White" FontWeight="Bold"
+                        Click="SystemButton_Click" Cursor="Hand"/>
+                <Button x:Name="ExitButton" Content="Exit" Height="40" Width="80" Margin="5" 
+                        Background="#FF4444" Foreground="White" FontWeight="Bold" Click="ExitButton_Click" Cursor="Hand"/>
+            </StackPanel>
+        </Grid>
+
+
+
+        <!-- IO Status Panel - Bottom -->
+        <Border DockPanel.Dock="Bottom" Background="#242424" BorderThickness="0,1,0,0" BorderBrush="#444444" Height="50" Margin="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- PLC Input + PC Output (Combined) -->
+                <Grid Grid.Column="0" VerticalAlignment="Center" Margin="10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <TextBlock Text="PLC:" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold" Margin="0,0,8,0"/>
+                        <Border x:Name="PlcAliveIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="Alive" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PlcResetIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="Reset" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PlcTriggerIndicator" Background="#888888" Padding="5,3" CornerRadius="2">
+                            <TextBlock Text="Trigger" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="16,0,0,0">
+                        <TextBlock Text="PC:" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold" Margin="0,0,8,0"/>
+                        <Border x:Name="PcAliveIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="Alive" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PcReadyIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="Ready" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PcBusyIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="Busy" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PcGrabIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="Grab" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PcOkIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="OK" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PcNgIndicator" Background="#888888" Padding="5,3" CornerRadius="2" Margin="0,0,4,0">
+                            <TextBlock Text="NG" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border x:Name="PcCompleteIndicator" Background="#888888" Padding="5,3" CornerRadius="2">
+                            <TextBlock Text="Complete" FontSize="10" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Reserve Button 1 -->
+                <Button Grid.Column="1" Content="Reserve 1" Height="38" Margin="5" Background="#9966FF" Foreground="White" 
+                FontWeight="Bold" FontSize="10" Click="ReserveButton1_Click" Cursor="Hand"
+                Visibility="Collapsed"/>
+
+                <!-- Reserve Button 2 -->
+                <Button Grid.Column="2" Content="Reserve 2" Height="38" Margin="5" Background="#9966FF" Foreground="White" 
+                FontWeight="Bold" FontSize="10" Click="ReserveButton2_Click" Cursor="Hand"
+                Visibility="Collapsed"/>
+
+                <StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Center"
+                            HorizontalAlignment="Left" Margin="10,0,5,0">
+                    <TextBlock Text="Image Save Queue" FontSize="10" Foreground="#AAAAAA"
+                               FontWeight="Bold" Margin="0,0,0,3"/>
+                    <TextBlock x:Name="ImageSaveQueueStatusText"
+                               Text="대기 0/2 | 유휴 | 오류 0"
+                               FontSize="10" Foreground="#CCFF00"
+                               VerticalAlignment="Center" FontWeight="Bold"
+                               TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+
+                <!-- CPU Usage -->
+                <StackPanel Grid.Column="4" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,5,0">
+                    <TextBlock Text="CPU Usage" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold"
+                               TextAlignment="Left" HorizontalAlignment="Left" Margin="0,0,0,3"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ProgressBar x:Name="CpuUsageProgressBar" Height="6" VerticalAlignment="Center" Margin="0,0,8,0"
+                                     Background="#444444" Foreground="#00AA00" Value="0" Width="70"/>
+                        <TextBlock x:Name="CpuUsageText" Text="0.0%" FontSize="10"
+                                   Foreground="#CCFF00" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- GPU Usage -->
+                <StackPanel Grid.Column="5" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,5,0">
+                    <TextBlock Text="GPU Usage" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold"
+                               TextAlignment="Left" HorizontalAlignment="Left" Margin="0,0,0,3"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ProgressBar x:Name="GpuUsageProgressBar" Height="6" VerticalAlignment="Center" Margin="0,0,8,0"
+                                     Background="#444444" Foreground="#00AA00" Value="0" Width="70"/>
+                        <TextBlock x:Name="GpuUsageText" Text="0.0%" FontSize="10"
+                                   Foreground="#CCFF00" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Memory Usage -->
+                <StackPanel Grid.Column="6" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,5,0">
+                    <TextBlock Text="Memory Usage" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold"
+                               TextAlignment="Left" HorizontalAlignment="Left" Margin="0,0,0,3"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ProgressBar x:Name="MemoryUsageProgressBar" Height="6" VerticalAlignment="Center" Margin="0,0,8,0"
+                                     Background="#444444" Foreground="#00AA00" Value="0" Width="70"/>
+                        <TextBlock x:Name="MemoryUsageText" Text="0.0% (0GB)" FontSize="10"
+                                   Foreground="#CCFF00" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Disk Usage -->
+                <StackPanel Grid.Column="7" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,0,5,0">
+                    <TextBlock Text="Disk Usage" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold"
+                               TextAlignment="Left" HorizontalAlignment="Left" Margin="0,0,0,3"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="C:" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ProgressBar x:Name="DiskUsageProgressBar" Height="6" VerticalAlignment="Center" Margin="0,0,8,0"
+                                     Background="#444444" Foreground="#00AA00" Value="65" Width="150"/>
+                        <TextBlock x:Name="DiskUsageText" Text="65.0% (156GB)" FontSize="10"
+                                   Foreground="#CCFF00" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,3,0,0">
+                        <TextBlock Text="D:" FontSize="10" Foreground="#AAAAAA" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ProgressBar x:Name="DiskUsageDProgressBar" Height="6" VerticalAlignment="Center" Margin="0,0,8,0"
+                                     Background="#444444" Foreground="#00AA00" Value="45" Width="150"/>
+                        <TextBlock x:Name="DiskUsageDText" Text="45.0% (90GB)" FontSize="10"
+                                   Foreground="#CCFF00" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <!-- Right Panel - Info & Logs -->
+        <Grid DockPanel.Dock="Right" Background="#1A1A1A" Margin="10,10,10,10" Width="280">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Model Info Section -->
+            <Border Grid.Row="0" Background="#0D0D0D" Padding="10,8" BorderThickness="0,0,0,1" BorderBrush="#444444">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Model No" FontSize="10" Foreground="#AAAAAA"/>
+                        <TextBlock x:Name="ModelCodeText" Text="1" FontSize="20" Foreground="#CCFF00" FontWeight="Bold" Margin="0,3,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                        <TextBlock Text="Model Name" FontSize="10" Foreground="#AAAAAA"/>
+                        <TextBlock x:Name="ModelNameText" Text="SORENTO" FontSize="18" Foreground="#CCFF00" FontWeight="Bold" Margin="0,3,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Current Sequence -->
+            <Border Grid.Row="1" Background="#0D0D0D" Padding="10,8" BorderThickness="0,0,0,1" BorderBrush="#444444">
+                <StackPanel>
+                    <TextBlock Text="Current Seq" FontSize="10" Foreground="#AAAAAA"/>
+                    <TextBlock x:Name="CurrentSeqText" Text="5746" FontSize="16" Foreground="#00FF00" FontWeight="Bold" Margin="0,3,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Tack Time -->
+            <Border Grid.Row="2" Background="#0D0D0D" Padding="10,8" BorderThickness="0,0,0,1" BorderBrush="#444444">
+                <StackPanel>
+                    <TextBlock Text="Tack Time" FontSize="10" Foreground="#AAAAAA"/>
+                    <TextBlock x:Name="TackTimeText" Text="00:00.00" FontSize="14" Foreground="White" FontWeight="Bold" Margin="0,3,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- PLC Connection Status -->
+            <Border Grid.Row="3" Background="#0D0D0D" Padding="10,8" BorderThickness="0,0,0,1" BorderBrush="#444444">
+                <Grid VerticalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="PLC Connection" FontSize="10" Foreground="#AAAAAA" Margin="0,0,0,5"/>
+                        <Border Background="#00AA00" Padding="8,6" CornerRadius="2" HorizontalAlignment="Left">
+                            <TextBlock x:Name="PLCStatusText" Text="CONNECTED" FontSize="10" Foreground="Black" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Camera Connection Status -->
+            <Border Grid.Row="4" Background="#0D0D0D" Padding="10,8" BorderThickness="0,0,0,1" BorderBrush="#444444">
+                <Grid VerticalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Camera Connection" FontSize="10" Foreground="#AAAAAA" Margin="0,0,0,5"/>
+                        <WrapPanel x:Name="CameraStatusPanel" Orientation="Horizontal"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Sequence Status Detail -->
+            <Border Grid.Row="5" Background="#0D0D0D" Padding="10,8" BorderThickness="0,0,0,1" BorderBrush="#444444">
+                <StackPanel>
+                    <TextBlock Text="Sequence Status" FontSize="10" Foreground="#AAAAAA" Margin="0,0,0,5"/>
+                    <ListBox x:Name="SeqStatusListBox" Background="#0A0A0A" FontSize="10" 
+                             BorderThickness="1" BorderBrush="#333333" ItemsSource="{Binding SeqStatusItems}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}" Foreground="{Binding Foreground}"
+                                           FontFamily="{DynamicResource DefaultFontFamily}" TextWrapping="NoWrap"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+
+            <!-- Result Section -->
+            <Border Grid.Row="6" Background="#0A0A0A" Padding="15,12" Margin="0,8,0,8" CornerRadius="3">
+                <StackPanel>
+                    <TextBlock x:Name="ResultText" Text="OK" FontSize="40" Foreground="Black" FontWeight="Bold" TextAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Log Section -->
+            <Border Grid.Row="7" Background="#0D0D0D" Padding="0,5" BorderThickness="0,1,0,1" BorderBrush="#444444">
+                <TextBlock Text="Inspection Log" FontSize="10" Foreground="#AAAAAA" Padding="10,3"/>
+            </Border>
+
+            <Border Grid.Row="8" Background="#0A0A0A" Padding="5" BorderThickness="1" BorderBrush="#333333">
+                <ListBox x:Name="LogListBox" Background="#0A0A0A" Foreground="White" FontSize="10" 
+                         BorderThickness="0" Padding="0" ItemsSource="{Binding LogItems}"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Foreground="White"
+                                       FontFamily="{DynamicResource DefaultFontFamily}" TextWrapping="NoWrap"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Grid>
+
+        <!-- Center Panel - Camera Grid (14 cameras, 2x7) -->
+        <Grid x:Name="CameraGrid" Background="#0D0D0D" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Row 1: Cameras 1-7 -->
+            <Border Grid.Row="0" Grid.Column="0" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera1" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 1" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="1" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera2" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 2" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="2" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera3" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 3" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="3" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera4" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 4" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="4" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera5" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 5" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="5" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera6" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 6" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="6" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera7" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 7" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Row 2: Cameras 8-14 -->
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera8" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 8" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="1" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera9" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 9" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="2" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera10" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 10" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="3" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera11" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 11" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="4" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera12" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 12" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="5" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera13" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 13" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="6" BorderThickness="1" BorderBrush="#444444" Margin="2">
+                <Grid Background="#1A1A1A">
+                    <local:ZoomPanDisplay x:Name="Camera14" Opacity="0.8"/>
+                    <TextBlock IsHitTestVisible="False" Text="Camera 14" FontSize="11" Foreground="#CCFF00" Margin="5" 
+                               Background="#00000080" Padding="3,2" FontWeight="Bold"/>
+                    <Border IsHitTestVisible="False" BorderThickness="2" BorderBrush="#00AA00" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Center" Padding="15,4" Margin="5">
+                        <TextBlock Text="PASS" FontSize="10" Foreground="#00AA00" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

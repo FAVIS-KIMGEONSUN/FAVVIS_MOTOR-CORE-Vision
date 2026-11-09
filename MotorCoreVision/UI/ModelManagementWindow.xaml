@@ -1,0 +1,37 @@
+<Window x:Class="FAVIS.ModelManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Model Management"
+        Width="600"
+        Height="460"
+        WindowStartupLocation="CenterOwner"
+        Background="#1A1A1A"
+        Foreground="White"
+        FontFamily="{DynamicResource DefaultFontFamily}">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Model Management" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+        <DataGrid x:Name="ModelGrid" Grid.Row="1"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  CanUserDeleteRows="False" SelectionMode="Single"
+                  Background="#0A0A0A" Foreground="White"
+                  RowBackground="#1A1A1A" AlternatingRowBackground="#242424"
+                  BorderBrush="#444444">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Model No" Binding="{Binding ModelNo, UpdateSourceTrigger=PropertyChanged}" Width="130"/>
+                <DataGridTextColumn Header="Model Name" Binding="{Binding ModelName, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <Button Content="Add" Width="80" Height="30" Margin="0,0,8,0" Click="AddButton_Click"/>
+            <Button Content="Delete" Width="80" Height="30" Margin="0,0,8,0" Click="DeleteButton_Click"/>
+            <Button Content="Open Folder" Width="100" Height="30" Margin="0,0,8,0" Click="OpenFolderButton_Click"/>
+            <Button Content="Use Selected" Width="100" Height="30" Margin="0,0,8,0" Click="UseButton_Click"/>
+            <Button Content="Close" Width="80" Height="30" Click="CloseButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
